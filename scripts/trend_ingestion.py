@@ -1,6 +1,7 @@
 import csv
 import io
 import os
+import time
 from pathlib import Path
 from typing import List, Tuple
 
@@ -10,6 +11,9 @@ from perplexity import Perplexity
 
 from publish_daily_trend import publish_trends
 from trending_utils import BASE_DIR, CSV_HEADER, DEFAULT_CONTRIBUTOR, discover_prompt_dirs
+
+MAX_SYNTHESIS_ATTEMPTS = 3
+SYNTHESIS_RETRY_DELAY_SECONDS = 5
 
 
 def load_clients() -> Tuple[Perplexity, OpenAI]:
@@ -67,7 +71,7 @@ def summarize_perplexity(perplexity_client: Perplexity, query: str) -> str:
     return "\n".join(lines).strip()
 
 
-def synthesize_prompts(openai_client: OpenAI, folder_label: str, context: str) -> List[dict]:
+def _synthesize_prompts_once(openai_client: OpenAI, folder_label: str, context: str) -> List[dict]:
     prompt_text = f"""You are asked to produce the top 10 trending prompts for {folder_label}. Use the Perplexity search context below. Output exactly 10 CSV rows with the header prompt,contributor,comment. The contributor field should default to {DEFAULT_CONTRIBUTOR} if no human handle is evident. Comments should briefly describe why the prompt is trending or note a source when relevant. Do not include any extra explanation outside the CSV data itself.
 
 Perplexity context:
@@ -117,6 +121,25 @@ Perplexity context:
             }
         )
     return processed
+
+
+def synthesize_prompts(openai_client: OpenAI, folder_label: str, context: str) -> List[dict]:
+    last_error = None
+    for attempt in range(1, MAX_SYNTHESIS_ATTEMPTS + 1):
+        try:
+            processed = _synthesize_prompts_once(openai_client, folder_label, context)
+        except Exception as exc:
+            last_error = exc
+            print(f"  Attempt {attempt}/{MAX_SYNTHESIS_ATTEMPTS} failed: {exc}")
+        else:
+            if processed:
+                return processed
+            print(f"  Attempt {attempt}/{MAX_SYNTHESIS_ATTEMPTS} returned no prompts; retrying.")
+        if attempt < MAX_SYNTHESIS_ATTEMPTS:
+            time.sleep(SYNTHESIS_RETRY_DELAY_SECONDS)
+    raise RuntimeError(
+        f"Failed to synthesize prompts for {folder_label} after {MAX_SYNTHESIS_ATTEMPTS} attempts."
+    ) from last_error
 
 
 def append_new_prompts(csv_path: Path, entries: List[dict], existing: set) -> List[dict]:
