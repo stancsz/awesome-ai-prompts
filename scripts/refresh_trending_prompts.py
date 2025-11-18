@@ -1,7 +1,6 @@
 import csv
 import io
 import os
-from datetime import datetime
 from pathlib import Path
 from typing import List, Tuple
 
@@ -9,12 +8,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from perplexity import Perplexity
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-CSV_HEADER = ["prompt", "contributor", "comment"]
-README_PATH = BASE_DIR / "README.md"
-TRENDING_HEADING = "## Trending Prompts Today"
-STRUCTURE_HEADING = "## Structure"
-DEFAULT_CONTRIBUTOR = "@trend-bot"
+from trending_utils import BASE_DIR, CSV_HEADER, DEFAULT_CONTRIBUTOR, discover_prompt_dirs
 
 
 def load_clients() -> Tuple[Perplexity, OpenAI]:
@@ -28,18 +22,6 @@ def load_clients() -> Tuple[Perplexity, OpenAI]:
     perplexity_client = Perplexity(api_key=perplexity_key)
     openai_client = OpenAI(api_key=openai_key)
     return perplexity_client, openai_client
-
-
-def discover_prompt_dirs(base: Path) -> List[Path]:
-    csv_paths = sorted(base.glob("**/prompts.csv"))
-    dirs = []
-    for d in sorted({p.parent for p in csv_paths}):
-        # Exclude any prompts.csv located under the scripts/ folder to avoid
-        # treating scripts as prompt providers.
-        if "scripts" in d.parts:
-            continue
-        dirs.append(d)
-    return dirs
 
 
 def ensure_csv(path: Path) -> None:
@@ -152,45 +134,6 @@ def append_new_prompts(csv_path: Path, entries: List[dict], existing: set) -> Li
     return new_rows
 
 
-def build_readme_section(trending_data: List[Tuple[str, List[dict]]]) -> str:
-    lines = [TRENDING_HEADING, "", f"Last refreshed: {datetime.utcnow():%Y-%m-%d %H:%M UTC}", ""]
-    if not trending_data:
-        lines.append("Run `python scripts/refresh_trending_prompts.py` to populate this section.")
-        return "\n".join(lines).rstrip() + "\n"
-
-    for label, entries in trending_data:
-        lines.append(f"### {label}")
-        lines.append("")
-        if not entries:
-            lines.append("No new trending prompts could be generated for this category.")
-        else:
-            for idx, entry in enumerate(entries, start=1):
-                comment = f" - {entry['comment']}" if entry["comment"] else ""
-                lines.append(
-                    f"{idx}. {entry['prompt']} ({entry['contributor']}){comment}"
-                )
-        lines.append("")
-    lines.append("To regenerate the list above, rerun `python scripts/refresh_trending_prompts.py` after ensuring the required API keys are available in `.env`.")
-    return "\n".join(lines).rstrip() + "\n"
-
-
-def update_readme(trending_section: str) -> None:
-    if not README_PATH.exists():
-        raise FileNotFoundError("README.md not found in repository root.")
-
-    content = README_PATH.read_text(encoding="utf-8")
-    start = content.find(TRENDING_HEADING)
-    if start == -1:
-        raise RuntimeError(f"{TRENDING_HEADING} not found in README.md")
-
-    end = content.find(STRUCTURE_HEADING, start)
-    if end == -1:
-        raise RuntimeError(f"{STRUCTURE_HEADING} not found; cannot replace trending section.")
-
-    new_content = content[:start] + trending_section + "\n" + content[end:]
-    README_PATH.write_text(new_content, encoding="utf-8")
-
-
 def main() -> None:
     perplexity_client, openai_client = load_clients()
     prompt_dirs = discover_prompt_dirs(BASE_DIR)
@@ -198,7 +141,6 @@ def main() -> None:
         print("No prompt directories found.")
         return
 
-    trending_info = []
     for directory in prompt_dirs:
         folder_label = str(directory.relative_to(BASE_DIR)).replace("\\", "/")
         print(f"Gathering trends for {folder_label}...")
@@ -216,11 +158,8 @@ def main() -> None:
         else:
             print(f"  No new prompts to append to {csv_path}")
 
-        trending_info.append((folder_label, prompts))
-
-    section = build_readme_section(trending_info)
-    update_readme(section)
-    print("Updated README.trending section.")
+    print("Finished refreshing provider CSVs.")
+    print("Run `python scripts/build_trending_readme.py` to rebuild the README trending section using the freshest CSV rows.")
 
 
 if __name__ == "__main__":
