@@ -1,39 +1,16 @@
-# Trending Prompts Today
+# Awesome AI Prompts
 
+This repository collects high-quality, tested prompts for popular generative AI services. Each subfolder focuses on a specific provider so entries stay organized and easy to browse.
 
+## Trending Prompts Today
 
+This section is populated by `scripts/refresh_trending_prompts.py`. Run:
 
+1. `pip install -r requirements.txt`
+2. Add `PERPLEXITY_API_KEY` and `OPENAI_API_KEY` to `.env`.
+3. Execute `python scripts/refresh_trending_prompts.py` from the repo root.
 
-
-
-
-
-
-
-
-
-# awesome-generative-ai-prompts
-
-A curated collection of high-quality prompts for large language and image models (ChatGPT, Gemini, Claude, MidJourney, Stable Diffusion, etc.). This repository centralizes prompts grouped by provider and purpose (text, image) and enforces a single canonical CSV format for all prompt files.
-
-Key points
-- Repository purpose: a searchable, maintainable library of prompts for creative writing, ideation, image generation, and more.
-- Canonical prompt CSV format: the header line must be exactly
-  prompt,contributor,comment
-  Files are UTF‑8 (no BOM), use double-quote escaping for fields, and preserve multiline prompts.
-- Daily refresh: trending prompts are captured regularly by scripts/refresh_trending_prompts.py to keep the collection current.
-- Validation: use scripts/validate_csvs.py to validate CSV encoding, headers, BOM presence, and basic CSV-parsing sanity.
-
-Quick usage
-- Validate repository CSVs:
-  python scripts/validate_csvs.py
-
-- Refresh trending prompts (requires .env with PERPLEXITY_API_KEY and OPENAI_API_KEY):
-  python scripts/refresh_trending_prompts.py
-
-Contributing
-- Add or edit prompts in the provider folders (each provider/leaf folder should contain a prompts.csv).
-- Follow the canonical CSV header and quoting rules above.
+The script gathers today’s top prompts per provider, appends new entries to each `prompts.csv`, and refreshes this section of the README every time it runs (along with copying the latest rows into the provider CSVs).
 
 ## Structure
 
