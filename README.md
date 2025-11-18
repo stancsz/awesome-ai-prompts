@@ -19,8 +19,26 @@ Contributions welcome via pull requests; please name files clearly and include s
 
 ## Contributing
 
-1. Add a prompt file in `.md` or `.txt` format (include author, model, and notes inside the file) and keep the filename lowercase using hyphens or underscores.
-2. Raise a pull request that explains the prompt’s purpose, sources, and any testing performed before it merges.
-3. Star and follow projects or authors you find inspiring to help grow the collection.
-4. Rate and review other contributors’ prompts whenever possible so the best entries rise to the top.
-5. Keep improving your submissions by revisiting them after feedback and noting any updates you make.
+Contributions should be submitted as UTF-8 encoded CSV files to the appropriate provider directory (for example `chatgpt/text/`, `gemini/image/`, etc.). Each CSV must have the exact header (first line):
+
+prompt,contributor,comment
+
+Rules:
+- Header order must be exactly: prompt,contributor,comment
+- Each CSV row is a single prompt entry.
+- Fields that contain commas, double quotes, or newlines must be wrapped in double quotes.
+- Escape double quotes by doubling them (e.g., "He said ""hello""").
+- Use a short contributor handle (e.g., @alice) or `@curated` for curated entries in the contributor field.
+- Keep comment as a short tag or note (optional).
+- Preserve newlines inside quoted fields for multiline prompts.
+
+Example row:
+"Summarize the following article:\n[article text]",@alice,"summarization"
+
+Workflow:
+1. Create or update a CSV file in the appropriate provider directory following the rules above.
+2. Open a pull request that explains the prompt’s purpose, model tested against, and any results you observed.
+3. Use descriptive filenames and organize prompts by intent or category where helpful.
+4. Reviewers may reformat or reject submissions that do not follow the CSV rules.
+
+This format ensures consistent, machine-readable contributions and makes it easy to curate and import prompts programmatically.
