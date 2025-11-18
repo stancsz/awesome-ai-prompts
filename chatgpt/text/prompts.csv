@@ -42,3 +42,20 @@ prompt,contributor,comment
 "Edit this paragraph to remove fluff and make it clearer, but keep it conversational.",@curated,"Revision & Editing"
 "Identify repetitive phrases and suggest fresher ways to phrase the same ideas.",@curated,"Revision & Editing"
 "Suggest where my plot could use a twist or stronger emotional punch.",@curated,"Revision & Editing"
+Help me clarify what actually matters today.,@AIClarity,Viral Reddit workflow highlighted by TechRadar for daily focus and planning.
+Ask me 3 questions to help me reflect and reset.,@AIClarity,Nightly journaling prompt from the same viral 3‑step ChatGPT routine gaining traction.
+Challenge my assumptions about this: [describe problem].,@AIClarity,Used to provoke critical thinking; part of the 3 viral prompts reshaping AI workflows.
+Here’s what I have in my fridge and pantry: [list ingredients]. Can you suggest 3 easy meal ideas I can make tonight?,@tomsguide,Everyday life prompt from Tom's Guide that saves time and reduces food waste.
+"Explain [complex topic] in simple terms, as if I'm 12 years old.",@tomsguide,Popular simplification prompt for learning and quick comprehension (Tom's Guide pick).
+You’re a content optimization specialist. Rewrite this blog intro [paste content] so that it directly answers the query '[keyword]' in under 40 words.,@writesonic,SEO-focused prompt from Writesonic to target paragraph snippets and improve SERP presence.
+You’re an SEO copywriter skilled in metadata testing. Create five variations of the title tag and meta description for this URL: [insert].,@writesonic,Widely used by marketers to increase CTR; listed among best prompts for SEO.
+"Act as an English translator, spelling corrector and improver. I will speak to you in any language and you will detect the language, translate it and answer in the corrected and improved version of my text, in English.",@f,Top contribution from the 'awesome-chatgpt-prompts' GitHub repo for language learning and editing.
+"Make this in Japan anime style or 'Turn this into an anime scene, sunset in the background'.",@trend-bot,"Image-AI style prompt from recent guides on ChatGPT image tools (4.5), popular for profile art and creative edits."
+"Turn this story into a 10-slide carousel with a story arc, a caption that opens with a strong hook, and engagement prompts.",@trend-bot,Content-repurposing prompt shown in popular YouTube guides to speed social media creation and engagement.
+You're a content optimization specialist. Rewrite this blog intro [paste content] so that it directly answers the query '[keyword]' in under 40 words.,@trend-bot,High‑impact SEO prompt from Writesonic and prompt roundups — optimized for featured snippets and CTR improvements.
+Convert this FAQ content [insert] into valid JSON-LD FAQ schema that passes Google's Rich Results Test.,@trend-bot,Trending technical prompt for SEO engineers (Writesonic) to quickly generate implementable schema markup.
+Here’s what I have in my fridge: [list ingredients]. Suggest 3 easy meal ideas I can make tonight.,@AmandaCaswell,"Everyday favorite from Tom's Guide — practical, widely circulated for fast meal planning and reducing food waste."
+Turn this image into Japan anime style with sunset lighting and soft film grain.,@trend-bot,Inspired by Selldone's guide to image prompt styles — one of the most popular image‑AI prompt patterns for avatars and artwork.
+"I want you to act as an English translator, spelling corrector and improver. I will speak in any language and you will detect the language and reply in corrected English.",@f,Top entry from the awesome‑chatgpt‑prompts GitHub repo; widely reused for multilingual editing and improvement.
+"Simulate an interview for [role]. You are the interviewer, I will respond, and provide feedback on my answers.",@AmandaCaswell,"Recommended by Tom's Guide for interview prep — helps practice answers, receive realistic questions, and get critique."
+"Write a 30-day plan to master [hobby/skill], with daily tasks, milestones and resources.",@trend-bot,Popular learning prompt featured in YouTube/Tom's Guide rundowns — used to structure deliberate practice and progress tracking.
