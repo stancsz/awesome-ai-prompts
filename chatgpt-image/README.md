@@ -1,6 +1,6 @@
-# chatgpt/image
+# chatgpt-image
 
-Image or vision prompts for ChatGPT; include model details per entry.
+Image or vision prompts for ChatGPT; include model details per entry and keep the file in canonical CSV format.
 
 Contributions to this directory should be submitted as UTF-8 encoded CSV files with the exact header (first line):
 

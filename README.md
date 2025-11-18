@@ -71,7 +71,7 @@ Contributions welcome via pull requests; please name files clearly and include s
 
 ## Contributing
 
-Contributions should be submitted as UTF-8 encoded CSV files to the appropriate provider directory (for example `chatgpt/text/`, `gemini/image/`, etc.). Each CSV must have the exact header (first line):
+Contributions should be submitted as UTF-8 encoded CSV files to the appropriate provider directory (for example `chatgpt-text/`, `chatgpt-image/`, etc.). Each CSV must have the exact header (first line):
 
 prompt,contributor,comment
 
