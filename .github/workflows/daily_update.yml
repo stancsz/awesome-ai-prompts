@@ -1,0 +1,34 @@
+name: Daily Prompt Update
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs at midnight UTC
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-prompts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Generate prompts.json
+        run: python3 scripts/update_prompts.py
+
+      - name: Commit and push if changed
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add docs/prompts.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Automated update of prompts.json" && git push)

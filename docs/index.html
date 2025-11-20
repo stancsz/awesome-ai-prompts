@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prompts.Chat - Trending AI Prompts</title>
+    <title>Trending Prompts - World's First & Most Famous Prompts Directory</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
     <script>
@@ -46,7 +46,7 @@
         <!-- Header -->
         <header class="mb-12 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-                <h1 class="text-4xl font-bold text-emerald-400 mb-2">prompts.chat</h1>
+                <h1 class="text-4xl font-bold text-emerald-400 mb-2">Trending Prompts</h1>
                 <p class="text-gray-400">World's First & Most Famous Prompts Directory <span class="text-emerald-500 bg-emerald-900/30 px-2 py-1 rounded text-xs ml-2">Vibe Coding Prompts</span></p>
             </div>
             <div class="flex gap-4">
@@ -74,7 +74,7 @@
 
                         <div>
                             <div class="flex items-center gap-2 mb-4">
-                                <span class="bg-emerald-900/50 text-emerald-400 text-xs px-2 py-1 rounded-full uppercase tracking-wide" x-text="prompt.category"></span>
+                                <span class="bg-emerald-900/50 text-emerald-400 text-xs px-2 py-1 rounded-full uppercase tracking-wide" x-text="formatCategory(prompt.category)"></span>
                             </div>
                             <p class="text-gray-300 mb-4 line-clamp-4 font-mono text-sm" x-text="prompt.prompt"></p>
                         </div>
@@ -98,7 +98,7 @@
         <div class="flex flex-wrap gap-2 mb-8" id="filters">
             <button @click="filter = 'all'" :class="{'bg-emerald-600 text-white': filter === 'all', 'bg-gray-800 text-gray-400 hover:bg-gray-700': filter !== 'all'}" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors">All</button>
             <template x-for="cat in categories" :key="cat">
-                <button @click="filter = cat" :class="{'bg-emerald-600 text-white': filter === cat, 'bg-gray-800 text-gray-400 hover:bg-gray-700': filter !== cat}" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors capitalize" x-text="cat"></button>
+                <button @click="filter = cat" :class="{'bg-emerald-600 text-white': filter === cat, 'bg-gray-800 text-gray-400 hover:bg-gray-700': filter !== cat}" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors capitalize" x-text="formatCategory(cat)"></button>
             </template>
         </div>
 
@@ -120,7 +120,7 @@
 
                     <div>
                         <div class="flex items-center gap-2 mb-4">
-                            <span class="bg-gray-800 text-gray-400 text-xs px-2 py-1 rounded-full uppercase tracking-wide" x-text="prompt.category"></span>
+                            <span class="bg-gray-800 text-gray-400 text-xs px-2 py-1 rounded-full uppercase tracking-wide" x-text="formatCategory(prompt.category)"></span>
                         </div>
                         <h3 class="text-lg font-semibold text-white mb-2" x-text="truncate(prompt.comment || 'Prompt', 50)"></h3>
                         <p class="text-gray-400 mb-4 line-clamp-4 font-mono text-sm" x-text="prompt.prompt"></p>
@@ -201,6 +201,18 @@
                     return (str.length > n) ? str.substr(0, n-1) + '&hellip;' : str;
                 },
 
+                formatCategory(cat) {
+                    if (!cat) return '';
+                    // Replace hyphens with spaces
+                    let formatted = cat.replace(/-/g, ' ');
+                    // Specific overrides
+                    if (cat === 'chatgpt-text') return 'ChatGPT Text';
+                    if (cat === 'chatgpt-image') return 'ChatGPT Image';
+                    if (cat === 'google-nano-banana') return 'Google Nano Banana';
+                    // Capitalize words
+                    return formatted.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
+                },
+
                 async copyToClipboard(text) {
                     try {
                         await navigator.clipboard.writeText(text);
@@ -231,7 +243,7 @@
                     // Send to API
                     try {
                         // Use a unique namespace per repo/user. For now we use a generic one but ideally this should be configured.
-                        const namespace = 'prompts-collection-demo';
+                        const namespace = 'awesome-trending-ai-prompts';
                         await fetch(`https://api.counterapi.dev/v1/${namespace}/${id}/up`);
                     } catch (e) {
                         console.error("Failed to register like:", e);
@@ -239,7 +251,7 @@
                 },
 
                 async fetchLikeCounts(promptsToFetch) {
-                     const namespace = 'prompts-collection-demo';
+                     const namespace = 'awesome-trending-ai-prompts';
                      // We can't batch fetch easily with this API, so we might just fetch for the daily picks for now
                      // Or just fetch on view.
                      // For demo purposes, let's just fetch for the daily picks.
