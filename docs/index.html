@@ -152,6 +152,8 @@
         function app() {
             return {
                 prompts: [],
+                filteredPrompts: [],
+                dailyPicks: [],
                 categories: [],
                 filter: 'all',
                 search: '',
@@ -165,10 +167,12 @@
                         this.prompts = await response.json();
                         this.categories = [...new Set(this.prompts.map(p => p.category))];
 
-                        // Fetch initial likes for visible prompts (optimization)
-                        // For now, we'll just fetch on demand or load a few.
-                        // Actually, fetching 500+ counts might be heavy.
-                        // We will just show local likes immediately, and fetch counts asynchronously for displayed items.
+                        this.calculateDailyPicks();
+                        this.updateFilteredPrompts();
+
+                        // Watchers
+                        this.$watch('filter', () => this.updateFilteredPrompts());
+                        this.$watch('search', () => this.updateFilteredPrompts());
 
                         this.fetchLikeCounts(this.dailyPicks);
                     } catch (e) {
@@ -176,8 +180,8 @@
                     }
                 },
 
-                get filteredPrompts() {
-                    return this.prompts.filter(p => {
+                updateFilteredPrompts() {
+                    this.filteredPrompts = this.prompts.filter(p => {
                         const matchesCategory = this.filter === 'all' || p.category === this.filter;
                         const matchesSearch = p.prompt.toLowerCase().includes(this.search.toLowerCase()) ||
                                             (p.comment && p.comment.toLowerCase().includes(this.search.toLowerCase()));
@@ -185,8 +189,11 @@
                     });
                 },
 
-                get dailyPicks() {
-                    if (this.prompts.length === 0) return [];
+                calculateDailyPicks() {
+                    if (this.prompts.length === 0) {
+                        this.dailyPicks = [];
+                        return;
+                    }
                     // Use date string as seed
                     const dateStr = new Date().toISOString().split('T')[0];
                     const seed = this.cyrb128(dateStr);
@@ -194,7 +201,7 @@
 
                     // Shuffle a copy of prompts using the seeded random
                     const shuffled = [...this.prompts].sort(() => 0.5 - random());
-                    return shuffled.slice(0, 3);
+                    this.dailyPicks = shuffled.slice(0, 3);
                 },
 
                 truncate(str, n) {

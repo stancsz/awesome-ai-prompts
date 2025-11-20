@@ -1260,20 +1260,6 @@
     "comment": "Recommended in multiple roundups (YouTube/Tom's Guide) to create structured, achievable learning plans."
   },
   {
-    "id": "b2b17cacd479fabd9eee89750c288c4a",
-    "category": "chatgpt-text",
-    "prompt": "Here’s what I have in my fridge: [list ingredients]. Suggest 3 easy meal ideas I can make tonight.",
-    "contributor": "@AmandaCaswell",
-    "comment": "Everyday favorite from Tom's Guide — practical, widely circulated for fast meal planning and reducing food waste."
-  },
-  {
-    "id": "0d9e92fd92f71920b0b9894164dcb68e",
-    "category": "chatgpt-text",
-    "prompt": "Write a 30-day plan to master [hobby/skill], with daily tasks, milestones and resources.",
-    "contributor": "@trend-bot",
-    "comment": "Popular learning prompt featured in YouTube/Tom's Guide rundowns — used to structure deliberate practice and progress tracking."
-  },
-  {
     "id": "374d3ed3473a721213813bfffb78ef33",
     "category": "chatgpt-text",
     "prompt": "Challenge my assumptions about this.",

@@ -3,18 +3,24 @@ import json
 import os
 import hashlib
 
-def generate_id(text):
+def generate_id(text, category):
+    # Include category in hash to ensure uniqueness across categories if same prompt exists
+    # Also helpful if we have duplicate prompts in same file, we might want to handle that.
+    # But for now, let's just hash the text.
+    # Wait, if duplicates exist in CSV, we should probably deduplicate or make unique IDs.
+    # Let's append a counter if we encounter the same ID.
     return hashlib.md5(text.encode('utf-8')).hexdigest()
 
 def main():
     repo_root = os.getcwd()
     prompts = []
+    seen_ids = set()
 
     # Walk through all directories
     for root, dirs, files in os.walk(repo_root):
         if "prompts.csv" in files:
             category = os.path.basename(root)
-            # Skip if category is the repo root itself (unlikely but possible)
+            # Skip if category is the repo root itself
             if root == repo_root:
                 continue
 
@@ -29,7 +35,20 @@ def main():
                             continue
 
                         prompt_text = row['prompt']
-                        prompt_id = generate_id(prompt_text)
+
+                        # Generate base ID
+                        base_id = generate_id(prompt_text, category)
+                        prompt_id = base_id
+
+                        # Handle collisions (duplicate prompts)
+                        # If exact same prompt exists, we skip it? Or render it?
+                        # If it's the exact same prompt text, it's likely a duplicate entry.
+                        # Let's skip exact duplicates to keep the list clean.
+                        if prompt_id in seen_ids:
+                            print(f"Skipping duplicate prompt ID: {prompt_id} in {category}")
+                            continue
+
+                        seen_ids.add(prompt_id)
 
                         prompt_data = {
                             "id": prompt_id,
