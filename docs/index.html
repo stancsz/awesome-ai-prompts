@@ -64,7 +64,7 @@
                 Daily Picks <span class="text-sm font-normal text-gray-500 ml-2" x-text="today"></span>
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <template x-for="prompt in dailyPicks" :key="prompt.id">
+                <template x-for="prompt in dailyPicks" :key="prompt.id + '-daily'">
                     <div class="card rounded-xl p-6 flex flex-col justify-between h-full relative group">
                         <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button @click="copyToClipboard(prompt.prompt)" class="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white" title="Copy Prompt">
@@ -110,7 +110,7 @@
 
         <!-- Main Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <template x-for="prompt in filteredPrompts" :key="prompt.id">
+            <template x-for="prompt in filteredPrompts" :key="prompt.id + '-main'">
                 <div class="card rounded-xl p-6 flex flex-col justify-between h-full relative group">
                     <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button @click="copyToClipboard(prompt.prompt)" class="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white" title="Copy Prompt">
